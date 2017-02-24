@@ -20,24 +20,23 @@ def main():
 	port_num = 1234
 	target_linenum = 4 #zero bases line number
 
-	fileDir = "C:\SimD\exbak"
+	fileDir = "C:\QSango\Bak"
 	backup_dir = r'.\backup'
 	if not os.path.exists(backup_dir):
 		os.makedirs(backup_dir)
 	fileList = listFiles(fileDir)
-	for fileObj in fileList:
-		shutil.copy(fileObj, backup_dir)
-		lines = open(fileObj).readlines()
-		#print re.sub(r'Port = 1234','sssss', port_num)		
-		#print lines, fileObj, port_num
-		lines[target_linenum] = lines[target_linenum].replace('Port = 1234,','Port = ' + str(port_num) +',')
-		#save changes
-		print fileObj + " changed to: " + lines[target_linenum]
-		open(fileObj,'wb').writelines(lines)
-		port_num = port_num + 1
-		#for s in lines:
-		#	s.replace('Port = 1234,','Port = ' + str(port_num) +',')
-		#	print fileObj + " has been done."
+	for filePath in fileList:
+		shutil.copy(filePath, backup_dir)
+		all_lines = open(filePath).readlines()
+		cnt = 0
+		for line in all_lines:
+			if line.find('Port')==0:
+				all_lines[cnt] = line.replace('Port = 1234,', 'Port = ' + str(port_num) +',')
+				print all_lines[cnt]				
+				open(filePath,'wb').writelines(all_lines)
+				port_num = port_num + 1
+				break
+			cnt = cnt + 1
 	return
 main()
 print "replace all done."
