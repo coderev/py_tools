@@ -19,16 +19,12 @@ sysNames = ['PSCADA', 'MPSCADA', 'TPSCADA', 'BAS', 'FAS', 'PSD2', 'PSD','PA', 'C
 re_normal_pattern = re.compile(r'Variable\s\[(\w+-.+)\]\s@\s\((\d+/\d+/\d+/\d+/\d+)\):\s(\w+)\s:\sOLD\s(\d+[\.?|\s?]\d+)\S\sNEW\s(\d+[\.?|\s?]\d+)')
 re_badlength_pattern = re.compile(r'Bad length.+AEIV.+\[(\w+\-\w+)\]\s@\s\((\d+/\d+/\d+/\d+/\d+)\)')
 fileList=[]
-evChanged=[]
+evAllFiles=[]
 def splitEV(evName):
 	#name=deiCQ612PSDASD__110-LCBOPE, DEIV, old=0, new=0, delta=0
-	#name=deiCQ612PSDASD__110-CLCECL, DEIV, old=0, new=0, delta=0
 	#name=deiCQ612PSDASD__110-OPEFAL, DEIV, old=0, new=0, delta=0
 	#name=aeiCQ628BASAT___ATPB-VOLAA, AEIV, old=229.0, new=228.0, delta=1.0
 	#name=aeiCQ628BASAT___ATPB-VOLAB, AEIV, old=229.0, new=228.0, delta=1.0
-	#name=deiCQ612PSDASD__111-FULOPSTA, DEIV, old=0, new=1, delta=1
-	#name=deiCQ612PSDASD__111-FULCLSTA, DEIV, old=0, new=0, delta=0
-	#re_ev_split_patt = re.compile(r'')
 	pos = -1
 	sys = "UNKNOWN"
 	res_in_csv = evName[0:3] + "," + evName[3:8] + "," #aei,CQ612,
@@ -69,7 +65,8 @@ def main():
 	fileCnt = 0
 	for filePath in fileList:
 		print "processing file: " + filePath + " ["+ str(fileCnt+1) +" of " + fileNumber +"]..."
-		cnt = 0
+		evChanged=[]
+		line_cnt = 0
 		prev_ev_changed = len(evChanged)		
 		all_lines = open(filePath).readlines()
 		#to process each file
@@ -90,18 +87,18 @@ def main():
 					evGet.evValNEW = float(m.group(5))
 				evGet.evDelta = evGet.evValNEW - evGet.evValOLD
 				evChanged.append(evGet)
-			cnt = cnt + 1
+			line_cnt = line_cnt + 1
 
 		print str(len(evChanged) - prev_ev_changed) + " of " + str(len(evChanged))
-		fileCnt = fileCnt + 1
-	output = open(baseDir+"\\external_vars.csv",'w+')
-	for x in xrange(0,len(evChanged)):
-		evGet = evChanged[x]
-		splitted_str = splitEV(evGet.evName)		
-		output.write(evGet.evName + "," + splitted_str + "," + evGet.evAddr + "," + str(evGet.evValOLD) + "," + str(evGet.evValNEW) + "," + str(abs(evGet.evDelta)) +'\n')
-		output.flush()
+		output = open(baseDir+"\\external_vars"+str(fileCnt)+".csv",'w+')
+		for x in xrange(0,len(evChanged)):
+			evGet = evChanged[x]
+			splitted_str = splitEV(evGet.evName)		
+			output.write(evGet.evName + "," + splitted_str + "," + evGet.evAddr + "," + str(evGet.evValOLD) + "," + str(evGet.evValNEW) + "," + str(abs(evGet.evDelta)) +'\n')
+			output.flush()
 			#print "name=" + evGet.evName + ", " + evGet.evType + ", old=" + str(evGet.evValOLD) + ", new=" + str(evGet.evValNEW) + ", delta=" + str( abs(evGet.evDelta))
-	output.close()
+		output.close()
+		fileCnt = fileCnt + 1
 	return
 
 main()
