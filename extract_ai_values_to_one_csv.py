@@ -105,7 +105,11 @@ def listFiles(dirPath):
 def statisticsEV(evName):
 	pass
 def main():
-	baseDir = "C:\\UnifyIO\\log\\log_OCCR2_20170909120000\\log"
+	#baseDir = "C:\\UnifyIO\\log\\log_OCCR2_20170909120000\\log"
+	baseDir = "C:\\UnifyIO\\log"
+	output = open(baseDir+"\\external_vars_all_in_one.csv",'a')
+	output.write("evName,evType,evStation,evSystem,evClass,evLabel,evPoint,evAddr,oldValue,newValue,deltaValue\n")
+	output.close()
 	fileList = listFiles(baseDir)
 	fileNumber = str(len(fileList))
 	fileCnt = 0
@@ -136,8 +140,9 @@ def main():
 			line_cnt = line_cnt + 1
 
 		print str(len(evChanged) - prev_ev_changed) + " of " + str(len(evChanged))
-		output = open(baseDir+"\\external_vars"+str(fileCnt)+".csv",'w+')
-		output.write("evName,evAddr,oldValue,newValue,deltaValue\n")
+		#output = open(baseDir+"\\external_vars"+str(fileCnt)+".csv",'w+')
+		output = open(baseDir+"\\external_vars_all_in_one.csv",'a')
+		#output.write("evName,evType,evStation,evSystem,evClass,evLabel,evPoint,evAddr,oldValue,newValue,deltaValue\n")
 		for x in xrange(0,len(evChanged)):
 			evGet = evChanged[x]
 			splitted_str = splitEV(evGet.evName)		
