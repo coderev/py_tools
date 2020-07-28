@@ -1,0 +1,29 @@
+{
+    "tasks":[
+        {
+            "ip":"172.13.23.11",
+            "user":"tjl1",
+            "passwd":"tjl1",
+            "task":[
+                {
+                    "type":"exec",
+                    "cmd":"stop -now;clean -all"
+                },
+                {
+                    "type":"upload",
+                    "file":"S331_G10APAT6_200515.tar.gz",
+                    "local":"G:\\APPLI",
+                    "remote":"/home/tjl1/"
+                },
+                {
+                    "type":"exec",
+                    "cmd":"cd ~;/usr/contrib/bin/gunzip -c /home/tjl1/S331_G10APAT6_200515.tar.gz|tar xvf -;cd S331_G10APAT6_200515/scs;mv ScsEnvList ScsEnvList.factory;cp ~/current/scs/ScsEnvList ./;cd ~;ln -sf S331_G10APAT6_200515 current;exit"
+                },
+                {
+                    "type":"exec",
+                    "cmd":"cd ~;cd ~/current/scs/dac;ln -sf Scs;exit"
+                }
+            ]
+        }
+    ]
+}

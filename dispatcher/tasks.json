@@ -1,0 +1,37 @@
+{
+    "tasks":[
+        {
+            "ip":"192.168.1.25",
+            "user":"bjl2",
+            "passwd":"bjl2",
+            "task":[
+                {
+                    "type":"upload",
+                    "file":"OCC_A3_190530.tar.gz",
+                    "local":"C:\\Tmp\\SCADASoftEx\\Temp\\20191210",
+                    "remote":"/home/bjl2/"
+                },
+                {
+                    "type":"upload",
+                    "file":"tasks.json",
+                    "local":"C:\\Tmp\\SCADASoftEx\\Temp\\20191210",
+                    "remote":"/home/bjl2/"
+                },
+                {
+                    "type":"upload",
+                    "file":"test.py",
+                    "local":"C:\\Tmp\\SCADASoftEx\\Temp\\20191210",
+                    "remote":"/home/bjl2/"
+                },
+                {
+                    "type":"exec",
+                    "cmd":"cd /home/bjl2;/usr/contrib/bin/gunzip -c /home/bjl2/OCC_A3_190530.tar.gz|tar xvf -;cksum OCC_A3_190530.tar.gz"
+                },
+                {
+                    "type":"exec",
+                    "cmd":"cd ~;cp test.py test123.py;cp current/scs/ScsEnvList OCC_A3_190530/scs/ScsEnvList12345"
+                }
+            ]
+        }
+    ]
+}
